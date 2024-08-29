@@ -1,5 +1,5 @@
-# AutoEssayScorerLab2
-- [Learning Agency Lab - Automated Essay Scoring 2.0](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/overview)への参加時の解法を掲載。
+# 概要
+[HuMob Challenge 2024](https://wp.nyu.edu/humobchallenge2024/)における開発コード
 
-## セットアップ
-
+# 環境構築
+[こちら](https://github.com/takuya-tokumoto/EnvHuMOB2024)のrepositoryを参考に準備ください
