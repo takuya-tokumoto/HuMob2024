@@ -6,14 +6,13 @@ import random
 
 import numpy as np
 import torch
+from dataset_prob import HuMobDatasetTaskBTrain
+from model import *
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
-
-from scripts.dataset_prob import *
-from scripts.model import *
 
 
 def set_random_seed(seed=0):
@@ -55,13 +54,15 @@ def collate_fn(batch):
     }
 
 
-def task2(args):
-    name = f"batchsize{args.batch_size}_epochs{args.epochs}_embedsize{args.embed_size}_layersnum{args.layers_num}_headsnum{args.heads_num}_cuda{args.cuda}_lr{args.lr}_seed{args.seed}"
+def task(args):
+    file_name = f"batchsize{args.batch_size}_epochs{args.epochs}_embedsize{args.embed_size}_layersnum{args.layers_num}_headsnum{args.heads_num}_cuda{args.cuda}_lr{args.lr}_seed{args.seed}"
     current_time = datetime.datetime.now()
+    models_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/models/"
+    mode = "prod"  # 本番
 
-    log_path = os.path.join("log", "task2", name)
-    tensorboard_log_path = os.path.join("tb_log", "task2", name)
-    checkpoint_path = os.path.join("checkpoint", "task2", name)
+    log_path = os.path.join(models_path, mode, args.run_name, "log", "taskB", file_name)
+    tensorboard_log_path = os.path.join(models_path, mode, args.run_name, "tb_log", "taskB", file_name)
+    checkpoint_path = os.path.join(models_path, mode, args.run_name, "checkpoint", "taskB", file_name)
 
     os.makedirs(log_path, exist_ok=True)
     os.makedirs(tensorboard_log_path, exist_ok=True)
@@ -76,9 +77,11 @@ def task2(args):
     )
     writer = SummaryWriter(tensorboard_log_path)
 
-    task2_dataset_train = HuMobDatasetTask2Train("./data/task2_dataset_kotae.csv")
-    task2_dataloader_train = DataLoader(
-        task2_dataset_train,
+    task_dataset_train = HuMobDatasetTaskBTrain(
+        "/kaggle/s3storage/01_public/humob-challenge-2024/input/cityB_challengedata.csv.gz"
+    )
+    task_dataloader_train = DataLoader(
+        task_dataset_train,
         batch_size=args.batch_size,
         shuffle=True,
         collate_fn=collate_fn,
@@ -93,7 +96,7 @@ def task2(args):
     criterion = nn.CrossEntropyLoss()
 
     for epoch_id in range(args.epochs):
-        for batch_id, batch in enumerate(tqdm(task2_dataloader_train)):
+        for batch_id, batch in enumerate(tqdm(task_dataloader_train)):
             batch["d"] = batch["d"].to(device)
             batch["t"] = batch["t"].to(device)
             batch["input_x"] = batch["input_x"].to(device)
@@ -116,7 +119,7 @@ def task2(args):
             optimizer.step()
             optimizer.zero_grad()
 
-            step = epoch_id * len(task2_dataloader_train) + batch_id
+            step = epoch_id * len(task_dataloader_train) + batch_id
             writer.add_scalar("loss", loss.detach().item(), step)
         scheduler.step()
 
@@ -136,8 +139,9 @@ if __name__ == "__main__":
     parser.add_argument("--cuda", type=int, default=0)
     parser.add_argument("--lr", type=float, default=2e-5)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--run_name", type=str, default="init")
     args = parser.parse_args()
 
     set_random_seed(args.seed)
 
-    task2(args)
+    task(args)
