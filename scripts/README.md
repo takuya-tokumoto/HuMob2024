@@ -19,9 +19,15 @@ Download the data from [here](https://zenodo.org/records/10142719) and place it 
 2. Train
 
 ```bash
-python train_task1.py --batch_size 128 --epochs 200 --embed_size 128 --layers_num 4 --heads_num 8
+# 本番
+$ python train_taskb_prod.py --batch_size 128 --epochs 1 --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python train_taskc_prod.py --batch_size 128 --epochs 1 --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python train_taskd_prod.py --batch_size 128 --epochs 1 --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
 
-python train_task2.py --batch_size 128 --epochs 200 --embed_size 128 --layers_num 4 --heads_num 8
+# 精度評価用
+$ python train_taskb_test.py --batch_size 128 --epochs 1 --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python train_taskc_test.py --batch_size 128 --epochs 1 --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python train_taskd_test.py --batch_size 128 --epochs 1 --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
 ```
 
 3. Predict
@@ -29,9 +35,18 @@ python train_task2.py --batch_size 128 --epochs 200 --embed_size 128 --layers_nu
 Here, `${PTH_FILE_PATH}` refers to the path where the PTH file obtained after training the corresponding task.
 
 ```bash
-python val_task1.py --pth_file ${PTH_FILE_PATH} --embed_size 128 --layers_num 4 --heads_num 8
+# file_nameの設定
+$ export file_name=batchsize{batch_sizeの設定値}_epochs{epochsの設定値}_embedsize{embed_sizeの設定値}_layersnum{layers_numの設定値}_headsnum{heads_numの設定値}_cuda{cudaの設定値}_lr{lrの設定値}_seed{seedの設定値}
 
-python val_task2.py --pth_file ${PTH_FILE_PATH} --embed_size 128 --layers_num 4 --heads_num 8
+# 本番
+$ python val_taskb_prod.py --file_name ${file_name} --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python val_taskc_prod.py --file_name ${file_name} --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python val_taskd_prod.py --file_name ${file_name} --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+
+# 精度評価用
+$ python val_taskb_test.py --file_name ${file_name} --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python val_taskc_test.py --file_name ${file_name} --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
+$ python val_taskd_test.py --file_name ${file_name} --embed_size 128 --layers_num 4 --heads_num 8 --run_name {hoge}
 ```
 
 ## License

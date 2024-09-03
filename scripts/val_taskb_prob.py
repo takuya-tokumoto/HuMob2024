@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import glob
 import json
 import os
 
@@ -14,9 +15,10 @@ def task(args):
 
     models_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/models/"
     mode = "prod"  # 本番
-    pth_file = os.path.join(models_path, mode, args.run_name, "checkpoint", "taskB", args.file_name)
+    _pth_file = os.path.join(models_path, mode, args.run_name, "checkpoint", "taskB", args.file_name, "*.path")
+    pth_file = glob.glob(_pth_file)[-1]
 
-    output_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/models/"
+    output_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/output/"
     result_path = os.path.join(output_path, mode, args.run_name, "taskB", args.file_name)
     os.makedirs(result_path, exist_ok=True)
 

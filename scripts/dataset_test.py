@@ -114,8 +114,8 @@ class HuMobDatasetTaskBVal(Dataset):
             label_x = traj["x"].to_numpy()
             label_y = traj["y"].to_numpy()
 
-            mask_d_start = 60
-            mask_d_end = 74
+            mask_d_start = 45
+            mask_d_end = 74  # 59
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
             input_x[need_mask_idx] = 201
             input_y[need_mask_idx] = 201
@@ -263,7 +263,7 @@ class HuMobDatasetTaskCVal(Dataset):
             label_x = traj["x"].to_numpy()
             label_y = traj["y"].to_numpy()
 
-            mask_d_start = 60
+            mask_d_start = 45
             mask_d_end = 74
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
             input_x[need_mask_idx] = 201
@@ -412,7 +412,7 @@ class HuMobDatasetTaskDVal(Dataset):
             label_x = traj["x"].to_numpy()
             label_y = traj["y"].to_numpy()
 
-            mask_d_start = 60
+            mask_d_start = 45
             mask_d_end = 74
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
             input_x[need_mask_idx] = 201

@@ -59,10 +59,11 @@ def task(args):
     current_time = datetime.datetime.now()
     models_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/models/"
     mode = "test"  # テスト
+    task_sp = "taskB"
 
-    log_path = os.path.join(models_path, mode, args.run_name, "log", "taskB", name)
-    tensorboard_log_path = os.path.join(models_path, mode, args.run_name, "tb_log", "taskB", name)
-    checkpoint_path = os.path.join(models_path, mode, args.run_name, "checkpoint", "taskB", name)
+    log_path = os.path.join(models_path, mode, args.run_name, "log", task_sp, name)
+    tensorboard_log_path = os.path.join(models_path, mode, args.run_name, "tb_log", task_sp, name)
+    checkpoint_path = os.path.join(models_path, mode, args.run_name, "checkpoint", task_sp, name)
 
     os.makedirs(log_path, exist_ok=True)
     os.makedirs(tensorboard_log_path, exist_ok=True)
