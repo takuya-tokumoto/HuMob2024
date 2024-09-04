@@ -6,7 +6,7 @@ import random
 
 import numpy as np
 import torch
-from dataset_prod import HuMobDatasetTaskBTrain
+from dataset_test import HuMobDatasetTaskCTrain
 from model import *
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence
@@ -55,15 +55,15 @@ def collate_fn(batch):
 
 
 def task(args):
-    file_name = f"batchsize{args.batch_size}_epochs{args.epochs}_embedsize{args.embed_size}_layersnum{args.layers_num}_headsnum{args.heads_num}_cuda{args.cuda}_lr{args.lr}_seed{args.seed}"
+    name = f"batchsize{args.batch_size}_epochs{args.epochs}_embedsize{args.embed_size}_layersnum{args.layers_num}_headsnum{args.heads_num}_cuda{args.cuda}_lr{args.lr}_seed{args.seed}"
     current_time = datetime.datetime.now()
     models_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/models/"
-    mode = "prod"  # 本番
-    task_sp = "taskB"
+    mode = "test"  # テスト
+    task_sp = "taskC"
 
-    log_path = os.path.join(models_path, mode, args.run_name, "log", task_sp, file_name)
-    tensorboard_log_path = os.path.join(models_path, mode, args.run_name, "tb_log", task_sp, file_name)
-    checkpoint_path = os.path.join(models_path, mode, args.run_name, "checkpoint", task_sp, file_name)
+    log_path = os.path.join(models_path, mode, args.run_name, "log", task_sp, name)
+    tensorboard_log_path = os.path.join(models_path, mode, args.run_name, "tb_log", task_sp, name)
+    checkpoint_path = os.path.join(models_path, mode, args.run_name, "checkpoint", task_sp, name)
 
     os.makedirs(log_path, exist_ok=True)
     os.makedirs(tensorboard_log_path, exist_ok=True)
@@ -78,8 +78,8 @@ def task(args):
     )
     writer = SummaryWriter(tensorboard_log_path)
 
-    task_dataset_train = HuMobDatasetTaskBTrain(
-        "/kaggle/s3storage/01_public/humob-challenge-2024/input/cityB_challengedata.csv.gz"
+    task_dataset_train = HuMobDatasetTaskCTrain(
+        "/kaggle/s3storage/01_public/humob-challenge-2024/input/cityC_challengedata.csv.gz"
     )
     task_dataloader_train = DataLoader(
         task_dataset_train,

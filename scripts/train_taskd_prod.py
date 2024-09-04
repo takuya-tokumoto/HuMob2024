@@ -6,7 +6,7 @@ import random
 
 import numpy as np
 import torch
-from dataset_prod import HuMobDatasetTaskBTrain
+from dataset_prod import HuMobDatasetTaskDTrain
 from model import *
 from torch import nn
 from torch.nn.utils.rnn import pad_sequence
@@ -59,7 +59,7 @@ def task(args):
     current_time = datetime.datetime.now()
     models_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/models/"
     mode = "prod"  # 本番
-    task_sp = "taskB"
+    task_sp = "taskD"
 
     log_path = os.path.join(models_path, mode, args.run_name, "log", task_sp, file_name)
     tensorboard_log_path = os.path.join(models_path, mode, args.run_name, "tb_log", task_sp, file_name)
@@ -78,8 +78,8 @@ def task(args):
     )
     writer = SummaryWriter(tensorboard_log_path)
 
-    task_dataset_train = HuMobDatasetTaskBTrain(
-        "/kaggle/s3storage/01_public/humob-challenge-2024/input/cityB_challengedata.csv.gz"
+    task_dataset_train = HuMobDatasetTaskDTrain(
+        "/kaggle/s3storage/01_public/humob-challenge-2024/input/cityC_challengedata.csv.gz"
     )
     task_dataloader_train = DataLoader(
         task_dataset_train,
