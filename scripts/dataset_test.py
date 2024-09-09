@@ -21,8 +21,8 @@ class HuMobDatasetTaskBTrain(Dataset):
         self.len_array = []
 
         for uid, traj in tqdm(self.df.groupby("uid")):
-            if uid >= 22000:
-                traj = traj[traj["d"] < 45]
+            if uid >= 20000:
+                traj = traj[traj["d"] < 60]
 
             d = traj["d"].to_numpy()
             t = traj["t"].to_numpy()
@@ -98,7 +98,7 @@ class HuMobDatasetTaskBVal(Dataset):
         self.label_y_array = []
         self.len_array = []
 
-        self.df = self.df[self.df["uid"] >= 22000]
+        self.df = self.df[self.df["uid"] >= 20000]
         for uid, traj in tqdm(self.df.groupby("uid")):
             d = traj["d"].to_numpy()
             t = traj["t"].to_numpy()
@@ -114,8 +114,8 @@ class HuMobDatasetTaskBVal(Dataset):
             label_x = traj["x"].to_numpy()
             label_y = traj["y"].to_numpy()
 
-            mask_d_start = 45
-            mask_d_end = 74  # 59
+            mask_d_start = 60
+            mask_d_end = 74
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
             input_x[need_mask_idx] = 201
             input_y[need_mask_idx] = 201
@@ -170,8 +170,8 @@ class HuMobDatasetTaskCTrain(Dataset):
         self.len_array = []
 
         for uid, traj in tqdm(self.df.groupby("uid")):
-            if uid >= 17000:
-                traj = traj[traj["d"] < 45]
+            if uid >= 15000:
+                traj = traj[traj["d"] < 60]
 
             d = traj["d"].to_numpy()
             t = traj["t"].to_numpy()
@@ -247,7 +247,7 @@ class HuMobDatasetTaskCVal(Dataset):
         self.label_y_array = []
         self.len_array = []
 
-        self.df = self.df[self.df["uid"] >= 17000]
+        self.df = self.df[self.df["uid"] >= 15000]
         for uid, traj in tqdm(self.df.groupby("uid")):
             d = traj["d"].to_numpy()
             t = traj["t"].to_numpy()
@@ -263,7 +263,7 @@ class HuMobDatasetTaskCVal(Dataset):
             label_x = traj["x"].to_numpy()
             label_y = traj["y"].to_numpy()
 
-            mask_d_start = 45
+            mask_d_start = 60
             mask_d_end = 74
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
             input_x[need_mask_idx] = 201
@@ -319,8 +319,8 @@ class HuMobDatasetTaskDTrain(Dataset):
         self.len_array = []
 
         for uid, traj in tqdm(self.df.groupby("uid")):
-            if uid >= 3000:
-                traj = traj[traj["d"] < 45]
+            if uid >= 1000:
+                traj = traj[traj["d"] < 60]
 
             d = traj["d"].to_numpy()
             t = traj["t"].to_numpy()
@@ -396,7 +396,7 @@ class HuMobDatasetTaskDVal(Dataset):
         self.label_y_array = []
         self.len_array = []
 
-        self.df = self.df[self.df["uid"] >= 3000]
+        self.df = self.df[self.df["uid"] >= 1000]
         for uid, traj in tqdm(self.df.groupby("uid")):
             d = traj["d"].to_numpy()
             t = traj["t"].to_numpy()
@@ -412,7 +412,7 @@ class HuMobDatasetTaskDVal(Dataset):
             label_x = traj["x"].to_numpy()
             label_y = traj["y"].to_numpy()
 
-            mask_d_start = 45
+            mask_d_start = 60
             mask_d_end = 74
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
             input_x[need_mask_idx] = 201
