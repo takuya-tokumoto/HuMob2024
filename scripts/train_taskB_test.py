@@ -140,7 +140,7 @@ if __name__ == "__main__":
     parser.add_argument("--cuda", type=int, default=0)
     parser.add_argument("--lr", type=float, default=2e-5)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--run_name", type=str, default="init")
+    parser.add_argument("--run_name", type=str, default="shift_day")
     args = parser.parse_args()
 
     set_random_seed(args.seed)

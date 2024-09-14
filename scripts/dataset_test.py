@@ -6,6 +6,8 @@ import torch
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
+SHIFT_DAY = 30
+
 
 class HuMobDatasetTaskBTrain(Dataset):
     def __init__(self, path):
@@ -39,10 +41,10 @@ class HuMobDatasetTaskBTrain(Dataset):
             label_y = traj["y"].to_numpy()
 
             d_unique = np.unique(d)
-            if len(d_unique[(d_unique >= np.min(d_unique)) & (d_unique <= np.max(d_unique) - 14)]) == 0:
+            if len(d_unique[(d_unique >= np.min(d_unique + SHIFT_DAY)) & (d_unique <= np.max(d_unique) - 14)]) == 0:
                 continue
             mask_d_start = np.random.choice(
-                d_unique[(d_unique >= np.min(d_unique)) & (d_unique <= np.max(d_unique) - 14)]
+                d_unique[(d_unique >= np.min(d_unique + SHIFT_DAY)) & (d_unique <= np.max(d_unique) - 14)]
             )
             mask_d_end = mask_d_start + 14
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
@@ -191,7 +193,7 @@ class HuMobDatasetTaskCTrain(Dataset):
             if len(d_unique[(d_unique >= np.min(d_unique)) & (d_unique <= np.max(d_unique) - 14)]) == 0:
                 continue
             mask_d_start = np.random.choice(
-                d_unique[(d_unique >= np.min(d_unique)) & (d_unique <= np.max(d_unique) - 14)]
+                d_unique[(d_unique >= np.min(d_unique + SHIFT_DAY)) & (d_unique <= np.max(d_unique) - 14)]
             )
             mask_d_end = mask_d_start + 14
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
@@ -340,7 +342,7 @@ class HuMobDatasetTaskDTrain(Dataset):
             if len(d_unique[(d_unique >= np.min(d_unique)) & (d_unique <= np.max(d_unique) - 14)]) == 0:
                 continue
             mask_d_start = np.random.choice(
-                d_unique[(d_unique >= np.min(d_unique)) & (d_unique <= np.max(d_unique) - 14)]
+                d_unique[(d_unique >= np.min(d_unique + SHIFT_DAY)) & (d_unique <= np.max(d_unique) - 14)]
             )
             mask_d_end = mask_d_start + 14
             need_mask_idx = np.where((d >= mask_d_start) & (d <= mask_d_end))
