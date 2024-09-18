@@ -58,8 +58,8 @@ def task(args):
             pre_x, pre_y = -1, -1
             for step in range(len(output)):
                 if step > 0:
-                    output[step][0][pre_x] *= 0.9
-                    output[step][1][pre_y] *= 0.9
+                    output[step][0][pre_x] *= 1.0
+                    output[step][1][pre_y] *= 1.0
 
                 pred.append(torch.argmax(output[step], dim=-1))
                 pre_x, pre_y = pred[-1][0].item(), pred[-1][1].item()
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     parser.add_argument("--layers_num", type=int, default=4)
     parser.add_argument("--heads_num", type=int, default=8)
     parser.add_argument("--cuda", type=int, default=0)
-    parser.add_argument("--run_name", type=str, default="init")
+    parser.add_argument("--run_name", type=str, default="end_learn_v2")
     args = parser.parse_args()
 
     task(args)

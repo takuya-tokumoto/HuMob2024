@@ -16,8 +16,8 @@ from tqdm import tqdm
 def calculate_95_percentile(data, mask):
     """指定されたデータの95%信頼区間を計算"""
     data_np = data[mask].cpu().numpy()
-    lower_bound = np.percentile(data_np, 0.5)
-    upper_bound = np.percentile(data_np, 95.0)
+    lower_bound = np.percentile(data_np, 0.25)
+    upper_bound = np.percentile(data_np, 97.5)
     return int(lower_bound - 1), int(upper_bound - 1)
 
 
@@ -78,11 +78,11 @@ def task(args):
                     output[step][0][pre_x] *= 0.9
                     output[step][1][pre_y] *= 0.9
 
-                output[step][0][:lower_x] = 0
-                output[step][0][upper_x:] = 0
+                output[step][0][:lower_x] *= 0.1
+                output[step][0][upper_x:] *= 0.1
 
-                output[step][1][:lower_y] = 0
-                output[step][1][upper_y:] = 0
+                output[step][1][:lower_y] *= 0.1
+                output[step][1][upper_y:] *= 0.1
 
                 pred.append(torch.argmax(output[step], dim=-1))
                 pre_x, pre_y = pred[-1][0].item(), pred[-1][1].item()
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     parser.add_argument("--layers_num", type=int, default=4)
     parser.add_argument("--heads_num", type=int, default=8)
     parser.add_argument("--cuda", type=int, default=0)
-    parser.add_argument("--run_name", type=str, default="init")
+    parser.add_argument("--run_name", type=str, default="shift_day")
     args = parser.parse_args()
 
     task(args)
