@@ -58,8 +58,8 @@ def task(args):
             pre_x, pre_y = -1, -1
             for step in range(len(output)):
                 if step > 0:
-                    output[step][0][pre_x] *= 1.0
-                    output[step][1][pre_y] *= 1.0
+                    output[step][0][pre_x] *= 0.9
+                    output[step][1][pre_y] *= 0.9
 
                 pred.append(torch.argmax(output[step], dim=-1))
                 pre_x, pre_y = pred[-1][0].item(), pred[-1][1].item()
