@@ -4,18 +4,22 @@ import glob
 import json
 import os
 
+import numpy as np
 import torch
 from dataset_test import HuMobDatasetTaskBVal
 from model import *
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+
+# 95%信頼区間の計算関数
 def calculate_95_percentile(data, mask):
-    """入力データの95%信頼区間を計算"""
+    """指定されたデータの95%信頼区間を計算"""
     data_np = data[mask].cpu().numpy()
-    lower_bound = np.percentile(data_np, 2.5)
+    lower_bound = np.percentile(data_np, 0.25)
     upper_bound = np.percentile(data_np, 97.5)
-    return lower_bound, upper_bound
+    return int(lower_bound - 1), int(upper_bound - 1)
+
 
 def task(args):
 
@@ -25,7 +29,8 @@ def task(args):
     pth_file = glob.glob(_pth_file)[0]
 
     output_path = f"/kaggle/s3storage/01_public/humob-challenge-2024/output/"
-    result_path = os.path.join(output_path, mode, args.run_name, "taskB", args.file_name)
+    # result_path = os.path.join(output_path, mode, args.run_name, "taskB", args.file_name)
+    result_path = os.path.join(output_path, mode, "percentile95", "taskB", args.file_name)
     os.makedirs(result_path, exist_ok=True)
 
     task_dataset_val = HuMobDatasetTaskBVal(
@@ -59,21 +64,25 @@ def task(args):
             assert torch.all((data["input_x"] == 201) == (data["input_y"] == 201))
             pred_mask = data["input_x"] == 201
 
+            # 201以外の値が入っている部分をフィルタして信頼区間を計算
+            non_mask = ~pred_mask
+            lower_x, upper_x = calculate_95_percentile(data["input_x"], non_mask)
+            lower_y, upper_y = calculate_95_percentile(data["input_y"], non_mask)
+
             output = output[pred_mask]
             pred = []
             pre_x, pre_y = -1, -1
-
-            # 95%信頼区間の計算 (input_x, input_yに基づく)
-            lower_x, upper_x = calculate_95_percentile(data["input_x"], pred_mask)
-            lower_y, upper_y = calculate_95_percentile(data["input_y"], pred_mask)
 
             for step in range(len(output)):
                 if step > 0:
                     output[step][0][pre_x] *= 0.9
                     output[step][1][pre_y] *= 0.9
 
-                    # 95%範囲外なら尤度を0にする
-                    
+                output[step][0][:lower_x] *= 0.1
+                output[step][0][upper_x:] *= 0.1
+
+                output[step][1][:lower_y] *= 0.1
+                output[step][1][upper_y:] *= 0.1
 
                 pred.append(torch.argmax(output[step], dim=-1))
                 pre_x, pre_y = pred[-1][0].item(), pred[-1][1].item()
@@ -118,7 +127,7 @@ if __name__ == "__main__":
     parser.add_argument("--layers_num", type=int, default=4)
     parser.add_argument("--heads_num", type=int, default=8)
     parser.add_argument("--cuda", type=int, default=0)
-    parser.add_argument("--run_name", type=str, default="init")
+    parser.add_argument("--run_name", type=str, default="shift_day")
     args = parser.parse_args()
 
     task(args)

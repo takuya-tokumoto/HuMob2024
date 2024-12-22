@@ -104,7 +104,7 @@ if __name__ == "__main__":
     parser.add_argument("--layers_num", type=int, default=4)
     parser.add_argument("--heads_num", type=int, default=8)
     parser.add_argument("--cuda", type=int, default=0)
-    parser.add_argument("--run_name", type=str, default="init")
+    parser.add_argument("--run_name", type=str, default="end_learn_v2")
     args = parser.parse_args()
 
     task(args)

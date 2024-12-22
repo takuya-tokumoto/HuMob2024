@@ -113,6 +113,10 @@ def task(args):
             label = torch.stack((batch["label_x"], batch["label_y"]), dim=-1)
 
             pred_mask = batch["input_x"] == 201
+            # 201が全く存在しない場合、エラーを発生させて強制停止
+            if not pred_mask.any():
+                raise ValueError("201が存在しないため、処理を強制停止します。")
+
             pred_mask = torch.cat((pred_mask.unsqueeze(-1), pred_mask.unsqueeze(-1)), dim=-1)
 
             loss = criterion(output[pred_mask], label[pred_mask])
@@ -140,7 +144,7 @@ if __name__ == "__main__":
     parser.add_argument("--cuda", type=int, default=0)
     parser.add_argument("--lr", type=float, default=2e-5)
     parser.add_argument("--seed", type=int, default=0)
-    parser.add_argument("--run_name", type=str, default="init")
+    parser.add_argument("--run_name", type=str, default="shift_day")
     args = parser.parse_args()
 
     set_random_seed(args.seed)
