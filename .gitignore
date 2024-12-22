@@ -113,3 +113,6 @@ venv.bak/
 
 # wandb
 wandb/
+
+# result/
+result/

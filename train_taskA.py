@@ -125,6 +125,7 @@ def compute_validation_metrics(args, load_model_path):
             result["generated"].append(generated)
             result["reference"].append(reference)
 
+    # 工数削減のためuid300件のみでgeoblue, dtwを評価
     geobleu_scr, dtw_scr = caluc_test_score(result)
     wandb.log({"valid_geobleu_score": geobleu_scr, "valid_dtw_score": dtw_scr})
 
