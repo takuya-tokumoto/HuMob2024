@@ -21,17 +21,12 @@ def create_sample_data() -> pd.DataFrame:
             ["X店クーポン5000円_userID=002", 33.2, 131.0, "2025-03-23T12:00:00", True],
             ["X店クーポン5000円_userID=002", 34.4, 131.4, "2025-03-24T16:00:00", True],
         ],
-        columns=["uid", "x", "y", "time", "is_pred"]
+        columns=["uid", "x", "y", "time", "is_pred"],
     )
 
+
 # 地図に移動軌跡をプロットする関数
-def plot_trajectory(
-    df: pd.DataFrame,
-    m: folium.Map,
-    radius: float,
-    line_color: str,
-    marker_color: str
-) -> None:
+def plot_trajectory(df: pd.DataFrame, m: folium.Map, radius: float, line_color: str, marker_color: str) -> None:
     """移動軌跡情報を地図上にプロットする
 
     Args:
@@ -54,7 +49,7 @@ def plot_trajectory(
             location=[row.x, row.y],
             popup=f"UID: {row.uid}<br>時間: {row.time}",
             tooltip=f"UID: {row.uid} ({row.time})",
-            icon=folium.Icon(color=marker_color)
+            icon=folium.Icon(color=marker_color),
         ).add_to(m)
 
         folium.Circle(
@@ -63,8 +58,9 @@ def plot_trajectory(
             popup=f"UID: {row.uid}",
             color=marker_color,
             fill=True,
-            fill_opacity=0.07
+            fill_opacity=0.07,
         ).add_to(m)
+
 
 # Streamlit アプリのメイン処理
 def main():
@@ -92,6 +88,7 @@ def main():
 
     # 地図情報を表示
     st_folium(m, width=800, height=600)
+
 
 # アプリの実行
 if __name__ == "__main__":
